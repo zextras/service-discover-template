@@ -1,0 +1,11 @@
+{
+    "name": "Carbonio service-discover-template",
+    "Description": "Open source components required by Carbonio",
+    "buildDir": "/tmp/",
+    "output": "artifacts",
+    "Projects": [
+        {
+            "name": "consul-template"
+        }
+    ]
+}

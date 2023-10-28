@@ -1,0 +1,5 @@
+[Unit]
+Description=Target file for service-discover-template@ service templates
+
+[Install]
+WantedBy=multi-user.target
