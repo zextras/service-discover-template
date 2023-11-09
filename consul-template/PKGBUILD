@@ -1,13 +1,14 @@
 pkgname=service-discover-template
-pkgver=0.34.0
+pkgver=0.35.0
 pkgrel=1
 pkgdesc="Template rendering, notifier, and supervisor for Carbonio service-discover"
 arch=('x86_64')
 url="https://github.com/hashicorp/consul-template"
-license=('MPL2')
+license=('MPL-2.0')
 depends=(
   'service-discover-daemon'
 )
+makedepends=('unzip')
 provides=(
   'config-generator'
 )
@@ -16,7 +17,7 @@ conflicts=(
 )
 maintainer="Zextras <packages@zextras.com"
 backup=(
-  'etc/zextras/service-discover/template.hcl'
+  'etc/zextras/service-discover-template/template.hcl'
   "usr/lib/systemd/system/${pkgname}@.service"
   "usr/lib/systemd/system/${pkgname}.target"
 )
@@ -29,17 +30,19 @@ source=(
 )
 
 package() {
-  install -Dm755 "${srcdir}/consul-template" \
+  cd "${srcdir}"
+  unzip consul-template_${pkgver}_linux_amd64.zip
+  install -Dm644 "${srcdir}/consul-template" \
     "${pkgdir}/usr/bin/consul-template"
   install -Dm644 "${srcdir}/template.hcl" \
-    "${pkgdir}/etc/zextras/service-discover/template.hcl"
+    "${pkgdir}/etc/zextras/service-discover-template/template.hcl"
   install -Dm644 "${srcdir}/consul-template@.service" \
     "${pkgdir}/usr/lib/systemd/system/${pkgname}@.service"
   install -Dm644 "${srcdir}/consul-template.target" \
     "${pkgdir}/usr/lib/systemd/system/${pkgname}.target"
 }
 
-sha256sums=('c7a5817547d6545f8c5ce2dfea62c821ddd324dd9a3414519ebaba2aeeff59a0'
+sha256sums=('1b1c9127e8da25b2d7322e6f2aa8e6d946336083999e0fdb321f96ffd447eebd'
   'SKIP'
   'SKIP'
   'SKIP')
