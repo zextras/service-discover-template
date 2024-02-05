@@ -1,5 +1,5 @@
 pkgname=service-discover-template
-pkgver=0.35.0
+pkgver=0.36.0
 pkgrel=1
 pkgdesc="Template rendering, notifier, and supervisor for Carbonio service-discover"
 arch=('x86_64')
@@ -8,7 +8,6 @@ license=('MPL-2.0')
 depends=(
   'service-discover-daemon'
 )
-makedepends=('unzip')
 conflicts=('config-generator')
 provides=('config-generator')
 replaces=('config-generator')
@@ -28,7 +27,6 @@ source=(
 
 package() {
   cd "${srcdir}"
-  unzip consul-template_${pkgver}_linux_amd64.zip
   install -Dm755 "${srcdir}/consul-template" \
     "${pkgdir}/usr/bin/consul-template"
   install -Dm644 "${srcdir}/template.hcl" \
@@ -39,7 +37,7 @@ package() {
     "${pkgdir}/usr/lib/systemd/system/${pkgname}.target"
 }
 
-sha256sums=('1b1c9127e8da25b2d7322e6f2aa8e6d946336083999e0fdb321f96ffd447eebd'
+sha256sums=('9844aebb997b81dd5b58a6ddadbf650eca4b200ccbc2ad680d817528a73c0d3a'
   '3e678bbc1818519df21741f41b9bc60fe13c1ae0f09b1b1f707e041130484268'
   '8dc923d2c0e65d3a14ba0aad421f72b891f7b7a1526231207d356eff6e2353b3'
   '5bad0570804c91c4b15c311fec1b1a07587fa943e211f7b0431beb71cf9b0cb2')
