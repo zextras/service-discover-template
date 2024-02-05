@@ -5,7 +5,7 @@ PartOf=service-discover-template.target
 [Service]
 User=service-discover
 Group=service-discover
-EnvironmentFile=-/etc/default/servce-discover-template
+EnvironmentFile=-/etc/default/service-discover-template
 ExecStart=/usr/bin/consul-template -config /etc/zextras/service-discover-template/%i.hcl
 ExecReload=/usr/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
