@@ -9,10 +9,10 @@ depends=(
   'service-discover-daemon'
 )
 makedepends=('unzip')
-provides=(
+conflicts=(
   'config-generator'
 )
-conflicts=(
+replaces=(
   'config-generator'
 )
 maintainer="Zextras <packages@zextras.com"
@@ -32,7 +32,7 @@ source=(
 package() {
   cd "${srcdir}"
   unzip consul-template_${pkgver}_linux_amd64.zip
-  install -Dm644 "${srcdir}/consul-template" \
+  install -Dm755 "${srcdir}/consul-template" \
     "${pkgdir}/usr/bin/consul-template"
   install -Dm644 "${srcdir}/template.hcl" \
     "${pkgdir}/etc/zextras/service-discover-template/template.hcl"
@@ -43,6 +43,6 @@ package() {
 }
 
 sha256sums=('1b1c9127e8da25b2d7322e6f2aa8e6d946336083999e0fdb321f96ffd447eebd'
-  'SKIP'
-  'SKIP'
-  'SKIP')
+  '3e678bbc1818519df21741f41b9bc60fe13c1ae0f09b1b1f707e041130484268'
+  '8dc923d2c0e65d3a14ba0aad421f72b891f7b7a1526231207d356eff6e2353b3'
+  '5bad0570804c91c4b15c311fec1b1a07587fa943e211f7b0431beb71cf9b0cb2')
