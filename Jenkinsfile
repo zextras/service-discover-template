@@ -31,14 +31,14 @@ pipeline {
 					}
 					steps {
 						unstash 'project'
-                        script {
-                            if (BRANCH_NAME == 'devel') {
-                                def timestamp = new Date().format('yyyyMMddHHmmss')
-                                sh "sudo yap build ubuntu . -r ${timestamp}"
-                            } else {
-                                sh 'sudo yap build ubuntu .'
-                            }
-                        }
+                        			script {
+                            				if (BRANCH_NAME == 'devel') {
+                                				def timestamp = new Date().format('yyyyMMddHHmmss')
+                                				sh "sudo yap build ubuntu . -r ${timestamp}"
+                            				} else {
+                                				sh 'sudo yap build ubuntu .'
+                            				}
+                        			}
 						stash includes: 'artifacts/*.deb', name: 'artifacts-deb'
 					}
 					post {
@@ -55,14 +55,14 @@ pipeline {
 					}
 					steps {
 						unstash 'project'
-                        script {
-                            if (BRANCH_NAME == 'devel') {
-                                def timestamp = new Date().format('yyyyMMddHHmmss')
-                                sh "sudo yap build rocky . -r ${timestamp}"
-                            } else {
-                                sh 'sudo yap build rocky .'
-                            }
-                        }
+                        			script {
+                            				if (BRANCH_NAME == 'devel') {
+                                				def timestamp = new Date().format('yyyyMMddHHmmss')
+                                				sh "sudo yap build rocky . -r ${timestamp}"
+                            				} else {
+                                				sh 'sudo yap build rocky .'
+                            				}
+                        			}
 						stash includes: 'artifacts/x86_64/*.rpm', name: 'artifacts-rpm'
 					}
 					post {
