@@ -18,9 +18,9 @@ pipeline {
 		stage('Checkout & Stash') {
 			steps {
 				checkout scm
-        script {
-          env.GIT_COMMIT = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-        }
+        			script {
+          				env.GIT_COMMIT = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+        			}
 				stash includes: '**', name: 'project'
 			}
 		}
