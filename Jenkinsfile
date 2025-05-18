@@ -1,9 +1,4 @@
 pipeline {
-	parameters {
-		booleanParam defaultValue: false, 
-		description: 'Whether to upload the packages in devel repositories', 
-		name: 'PLAYGROUND'
-	}
 	options {
 		skipDefaultCheckout()
 		buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -11,7 +6,7 @@ pipeline {
 	}
 	agent {
 		node {
-			label 'base-agent-v2'
+			label 'base'
 		}
 	}
 	stages {
@@ -29,20 +24,22 @@ pipeline {
 				stage('Ubuntu') {
 					agent {
 						node {
-							label 'yap-agent-ubuntu-20.04-v2'
+							label 'yap-ubuntu-20-v1'
 						}
 					}
 					steps {
-						unstash 'project'
-                        			script {
-                            				if (BRANCH_NAME == 'devel') {
-                                				def timestamp = new Date().format('yyyyMMddHHmmss')
-                                				sh "sudo yap build ubuntu . -r ${timestamp}"
-                            				} else {
-                                				sh 'sudo yap build ubuntu .'
-                            				}
-                        			}
-						stash includes: 'artifacts/*.deb', name: 'artifacts-deb'
+						container('yap') {
+							unstash 'project'
+                        				script {
+                        	    				if (BRANCH_NAME == 'devel') {
+                        	        				def timestamp = new Date().format('yyyyMMddHHmmss')
+                        	        				sh "sudo yap build ubuntu . -r ${timestamp}"
+                        	    				} else {
+                        	        				sh 'sudo yap build ubuntu .'
+                        	    				}
+                        				}
+							stash includes: 'artifacts/*.deb', name: 'artifacts-deb'
+						}
 					}
 					post {
 						always {
@@ -53,65 +50,28 @@ pipeline {
 				stage('RHEL') {
 					agent {
 						node {
-							label 'yap-agent-rocky-8-v2'
+							label 'yap-rocky-8-v1'
 						}
 					}
 					steps {
-						unstash 'project'
-                        			script {
-                            				if (BRANCH_NAME == 'devel') {
-                                				def timestamp = new Date().format('yyyyMMddHHmmss')
-                                				sh "sudo yap build rocky . -r ${timestamp}"
-                            				} else {
-                                				sh 'sudo yap build rocky .'
-                            				}
-                        			}
-						stash includes: 'artifacts/x86_64/*.rpm', name: 'artifacts-rpm'
+						container('yap') {
+							unstash 'project'
+                        				script {
+                        	    				if (BRANCH_NAME == 'devel') {
+                        	        				def timestamp = new Date().format('yyyyMMddHHmmss')
+                        	        				sh "sudo yap build rocky . -r ${timestamp}"
+                        	    				} else {
+                        	        				sh 'sudo yap build rocky .'
+                        	    				}
+                        				}
+							stash includes: 'artifacts/*.rpm', name: 'artifacts-rpm'
+						}
 					}
 					post {
 						always {
-							archiveArtifacts artifacts: 'artifacts/x86_64/*.rpm', fingerprint: true
+							archiveArtifacts artifacts: 'artifacts/*.rpm', fingerprint: true
 						}
 					}
-				}
-			}
-		}
-		stage('Upload To Playground') {
-			when {
-				anyOf {
-					branch 'playground/*'
-					expression { params.PLAYGROUND == true }
-				}
-			}
-			steps {
-				unstash 'artifacts-deb'
-				unstash 'artifacts-rpm'
-
-				script {
-					def server = Artifactory.server 'zextras-artifactory'
-					def buildInfo
-					def uploadSpec
-					buildInfo = Artifactory.newBuildInfo()
-					uploadSpec = """{
-						"files": [
-							{
-								"pattern": "artifacts/*.deb",
-								"target": "ubuntu-playground/pool/",
-								"props": "deb.distribution=focal;deb.distribution=jammy;deb.distribution=noble;deb.component=main;deb.architecture=amd64;vcs.revision=${env.GIT_COMMIT}"
-							},
-							{
-								"pattern": "artifacts/x86_64/(service-discover-template)-(*).x86_64.rpm",
-								"target": "centos8-playground/zextras/{1}/{1}-{2}.x86_64.rpm",
-								"props": "rpm.metadata.arch=x86_64rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
-							},
-							{
-								"pattern": "artifacts/x86_64/(service-discover-template)-(*).x86_64.rpm",
-								"target": "rhel9-playground/zextras/{1}/{1}-{2}.x86_64.rpm",
-								"props": "rpm.metadata.arch=x86_64rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
-							}
-						]
-					}"""
-					server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
 				}
 			}
 		}
@@ -136,12 +96,12 @@ pipeline {
 								"props": "deb.distribution=focal;deb.distribution=jammy;deb.distribution=noble;deb.component=main;deb.architecture=amd64;vcs.revision=${env.GIT_COMMIT}"
 							},
 							{
-								"pattern": "artifacts/x86_64/(service-discover-template)-(*).x86_64.rpm",
+								"pattern": "artifacts/(service-discover-template)-(*).x86_64.rpm",
 								"target": "centos8-devel/zextras/{1}/{1}-{2}.x86_64.rpm",
 								"props": "rpm.metadata.arch=x86_64rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
 							},
 							{
-								"pattern": "artifacts/x86_64/(service-discover-template)-(*).x86_64.rpm",
+								"pattern": "artifacts/(service-discover-template)-(*).x86_64.rpm",
 								"target": "rhel9-devel/zextras/{1}/{1}-{2}.x86_64.rpm",
 								"props": "rpm.metadata.arch=x86_64rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
 							}
@@ -198,7 +158,7 @@ pipeline {
 					uploadSpec= """{
 						"files": [
 							{
-								"pattern": "artifacts/x86_64/(service-discover-template)-(*).x86_64.rpm",
+								"pattern": "artifacts/(service-discover-template)-(*).x86_64.rpm",
 								"target": "centos8-rc/zextras/{1}/{1}-{2}.x86_64.rpm",
 								"props": "rpm.metadata.arch=x86_64rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
 							}
@@ -227,7 +187,7 @@ pipeline {
 					uploadSpec= """{
 						"files": [
 							{
-								"pattern": "artifacts/x86_64/(service-discover-template)-(*).x86_64.rpm",
+								"pattern": "artifacts/(service-discover-template)-(*).x86_64.rpm",
 								"target": "rhel9-rc/zextras/{1}/{1}-{2}.x86_64.rpm",
 								"props": "rpm.metadata.arch=x86_64rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
 							}
