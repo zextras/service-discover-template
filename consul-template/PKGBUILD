@@ -25,6 +25,13 @@ source=(
   "consul-template.target"
 )
 
+sha256sums=(
+  '9844aebb997b81dd5b58a6ddadbf650eca4b200ccbc2ad680d817528a73c0d3a'
+  '3e678bbc1818519df21741f41b9bc60fe13c1ae0f09b1b1f707e041130484268'
+  '8dc923d2c0e65d3a14ba0aad421f72b891f7b7a1526231207d356eff6e2353b3'
+  '5bad0570804c91c4b15c311fec1b1a07587fa943e211f7b0431beb71cf9b0cb2'
+)
+
 package() {
   cd "${srcdir}"
   install -Dm755 "${srcdir}/consul-template" \
@@ -37,7 +44,3 @@ package() {
     "${pkgdir}/usr/lib/systemd/system/${pkgname}.target"
 }
 
-sha256sums=('9844aebb997b81dd5b58a6ddadbf650eca4b200ccbc2ad680d817528a73c0d3a'
-  '3e678bbc1818519df21741f41b9bc60fe13c1ae0f09b1b1f707e041130484268'
-  '8dc923d2c0e65d3a14ba0aad421f72b891f7b7a1526231207d356eff6e2353b3'
-  '5bad0570804c91c4b15c311fec1b1a07587fa943e211f7b0431beb71cf9b0cb2')
