@@ -1,5 +1,5 @@
 pkgname=service-discover-template
-pkgver=0.36.0
+pkgver=0.36.0 # renovate: datasource=github-releases depName=hashicorp/consul-template
 pkgrel=1
 pkgdesc="Template rendering, notifier, and supervisor for Carbonio service-discover"
 arch=('x86_64')
@@ -43,4 +43,3 @@ package() {
   install -Dm644 "${srcdir}/consul-template.target" \
     "${pkgdir}/usr/lib/systemd/system/${pkgname}.target"
 }
-
