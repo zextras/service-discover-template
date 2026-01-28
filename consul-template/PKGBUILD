@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname=service-discover-template
 pkgver=0.36.0 # renovate: datasource=github-releases depName=hashicorp/consul-template
 pkgrel=1
@@ -27,9 +31,9 @@ source=(
 
 sha256sums=(
   '9844aebb997b81dd5b58a6ddadbf650eca4b200ccbc2ad680d817528a73c0d3a'
-  '3e678bbc1818519df21741f41b9bc60fe13c1ae0f09b1b1f707e041130484268'
-  '8dc923d2c0e65d3a14ba0aad421f72b891f7b7a1526231207d356eff6e2353b3'
-  '5bad0570804c91c4b15c311fec1b1a07587fa943e211f7b0431beb71cf9b0cb2'
+  'cce95c31507290d28f4b88fe306a47033c3e7ca326140a78410d54098bbcb56b'
+  '2983835584102d0bfd19a7c9e2dd68a2eb9a0546fd4c89dac4074ae85f056b3a'
+  'ef6673d41c7ba511f54801817ee34834caba47bc3f14387c9706f963ebb1b294'
 )
 
 package() {

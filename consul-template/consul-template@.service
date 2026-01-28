@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 [Unit]
 Description=Template (:%i) rendering, notifier, and supervisor for Carbonio service-discover
 PartOf=service-discover-template.target
