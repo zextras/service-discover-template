@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # This denotes the start of the configuration section for Consul Template.
 
 # This is the signal to listen for to trigger a reload event. The default
