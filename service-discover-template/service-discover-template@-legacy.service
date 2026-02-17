@@ -3,8 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 [Unit]
-Description=Template (:%i) rendering, notifier, and supervisor for Carbonio service-discover
-PartOf=service-discover-template.target
+Description=Zextras Service Discover Template (:%i)
 
 [Service]
 User=service-discover
