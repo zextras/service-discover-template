@@ -70,9 +70,6 @@ systemctl start service-discover-template@myservice.service
 
 # Check status
 systemctl status service-discover-template@myservice.service
-
-# Manage multiple instances using the target
-systemctl start service-discover-template.target
 ```
 
 ## Contributing

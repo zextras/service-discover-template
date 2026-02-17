@@ -18,32 +18,60 @@ replaces=('config-generator')
 maintainer="Zextras <packages@zextras.com"
 backup=(
   'etc/zextras/service-discover-template/template.hcl'
-  "usr/lib/systemd/system/${pkgname}@.service"
-  "usr/lib/systemd/system/${pkgname}.target"
 )
 
 source=(
   "https://releases.hashicorp.com/consul-template/${pkgver}/consul-template_${pkgver}_linux_amd64.zip"
   'template.hcl'
-  "consul-template@.service"
-  "consul-template.target"
+  "${pkgname}@.service"
+  "${pkgname}@-legacy.service"
 )
 
 sha256sums=(
   '9844aebb997b81dd5b58a6ddadbf650eca4b200ccbc2ad680d817528a73c0d3a'
   'cce95c31507290d28f4b88fe306a47033c3e7ca326140a78410d54098bbcb56b'
-  '2983835584102d0bfd19a7c9e2dd68a2eb9a0546fd4c89dac4074ae85f056b3a'
-  'ef6673d41c7ba511f54801817ee34834caba47bc3f14387c9706f963ebb1b294'
+  'd64eab335be7c82cda469ec549160329f9aae4a4558762981d2e072c069e3601'
+  '2cd68358698e3d9bf1eed2c564027d884ec5af99310eff6aed7d5243823d97be'
 )
 
-package() {
-  cd "${srcdir}"
+_package() {
   install -Dm755 "${srcdir}/consul-template" \
     "${pkgdir}/usr/bin/consul-template"
   install -Dm644 "${srcdir}/template.hcl" \
-    "${pkgdir}/etc/zextras/service-discover-template/template.hcl"
-  install -Dm644 "${srcdir}/consul-template@.service" \
+    "${pkgdir}/etc/zextras/${pkgname}/template.hcl"
+}
+
+_package_legacy() {
+  install -Dm644 "${srcdir}/${pkgname}@-legacy.service" \
     "${pkgdir}/usr/lib/systemd/system/${pkgname}@.service"
-  install -Dm644 "${srcdir}/consul-template.target" \
-    "${pkgdir}/usr/lib/systemd/system/${pkgname}.target"
+}
+
+_package_systemd() {
+  install -Dm644 "${srcdir}/${pkgname}@.service" \
+    "${pkgdir}/usr/lib/systemd/system/${pkgname}@.service"
+}
+
+package() {
+  _package
+  _package_systemd
+}
+
+package__rocky_8() {
+  _package
+  _package_legacy
+}
+
+package__rocky_9() {
+  _package
+  _package_systemd
+}
+
+package__ubuntu_jammy() {
+  _package
+  _package_legacy
+}
+
+package__ubuntu_noble() {
+  _package
+  _package_systemd
 }
