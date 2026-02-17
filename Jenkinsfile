@@ -39,10 +39,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building deb/rpm packages'
-                buildStage([
-                    ubuntuSinglePkg: true,
-                    rockySinglePkg: true,
-                ])
+                buildStage()
             }
         }
 
@@ -57,11 +54,8 @@ pipeline {
             steps {
                 uploadStage(
                     packages: yapHelper.resolvePackageNames(),
-                    ubuntuSinglePkg: true,
-                    rockySinglePkg: true,
                 )
             }
         }
     }
 }
-

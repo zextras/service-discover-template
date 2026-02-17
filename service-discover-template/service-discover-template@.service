@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2023-2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+[Unit]
+Description=Zextras Service Discover Template (:%i)
+PartOf=carbonio-appserver.target carbonio-directory-server.target carbonio-mta.target carbonio-proxy.target
+
+[Service]
+User=service-discover
+Group=service-discover
+EnvironmentFile=-/etc/default/service-discover-template
+ExecStart=/usr/bin/consul-template -config /etc/zextras/service-discover-template/%i.hcl
+ExecReload=/usr/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy=carbonio-appserver.target carbonio-directory-server.target carbonio-mta.target carbonio-proxy.target
