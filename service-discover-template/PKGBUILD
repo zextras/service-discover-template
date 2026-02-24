@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname=service-discover-template
-pkgver=0.36.0 # renovate: datasource=github-releases depName=hashicorp/consul-template
+pkgver=0.41.4 # renovate: datasource=github-releases depName=hashicorp/consul-template
 pkgrel=2
 pkgdesc="Template rendering, notifier, and supervisor for Carbonio service-discover"
 arch=('x86_64')
