@@ -6,7 +6,7 @@ pkgname=service-discover-template
 pkgver=0.36.0 # renovate: datasource=github-releases depName=hashicorp/consul-template
 pkgrel=2
 pkgdesc="Template rendering, notifier, and supervisor for Carbonio service-discover"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 url="https://github.com/hashicorp/consul-template"
 license=('MPL-2.0')
 depends=(
@@ -19,20 +19,42 @@ maintainer="Zextras <packages@zextras.com"
 backup=(
   'etc/zextras/service-discover-template/template.hcl'
 )
-
+noextract=(
+  "consul-template_${pkgver}_linux_amd64.zip"
+  "consul-template_${pkgver}_linux_arm64.zip"
+)
 source=(
-  "https://releases.hashicorp.com/consul-template/${pkgver}/consul-template_${pkgver}_linux_amd64.zip"
   'template.hcl'
   "${pkgname}@.service"
   "${pkgname}@-legacy.service"
 )
-
+source_aarch64=(
+  "https://releases.hashicorp.com/consul-template/${pkgver}/consul-template_${pkgver}_linux_arm64.zip"
+)
+source_x86_64=(
+  "https://releases.hashicorp.com/consul-template/${pkgver}/consul-template_${pkgver}_linux_amd64.zip"
+)
 sha256sums=(
-  '9844aebb997b81dd5b58a6ddadbf650eca4b200ccbc2ad680d817528a73c0d3a'
   'cce95c31507290d28f4b88fe306a47033c3e7ca326140a78410d54098bbcb56b'
   'd64eab335be7c82cda469ec549160329f9aae4a4558762981d2e072c069e3601'
   '2cd68358698e3d9bf1eed2c564027d884ec5af99310eff6aed7d5243823d97be'
 )
+sha256sums_aarch64=(
+  '261a599f411042808b430e44c6f9b6be4c19ed36a5b56dcc9e5d1f0a64576c6c'
+)
+sha256sums_x86_64=(
+  '9844aebb997b81dd5b58a6ddadbf650eca4b200ccbc2ad680d817528a73c0d3a'
+)
+
+prepare() {
+  if [ "${CARCH}" = "x86_64" ]; then
+    unzip -o "${srcdir}/consul-template_${pkgver}_linux_amd64.zip" \
+      -d "${srcdir}"
+  elif [ "${CARCH}" = "aarch64" ]; then
+    unzip -o "${srcdir}/consul-template_${pkgver}_linux_arm64.zip" \
+      -d "${srcdir}"
+  fi
+}
 
 _package() {
   install -Dm755 "${srcdir}/consul-template" \
