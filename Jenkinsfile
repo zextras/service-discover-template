@@ -30,10 +30,18 @@ pipeline {
         stage('Setup') {
             steps {
                 checkout scm
-                script {
-                    gitMetadata()
-                }
+                gitMetadata()
             }
+        }
+
+        stage('Skip CI') {
+            steps {
+                script { semanticRelease.guard() }
+            }
+        }
+
+        stage('Security Scan') {
+            steps { gitleaksStage() }
         }
 
         stage('Build') {
@@ -51,18 +59,18 @@ pipeline {
             }
         }
 
-        stage('Upload artifacts')
-        {
-            when {
-                expression { return uploadStage.shouldUpload() }
-            }
+        stage('Upload artifacts') {
             tools {
                 jfrog 'jfrog-cli'
             }
             steps {
-                uploadStage(
-                    packages: yapHelper.resolvePackageNames(),
-                )
+                uploadStage()
+            }
+        }
+
+        stage('Semantic Release') {
+            steps {
+                semanticRelease()
             }
         }
     }
